@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="yourent_configurator.yourent_configurator_skip_button">
+        <div class="container-fluid py-2 pb-md-3 text-end pe-lg-5">
+            <button class="btn btn-link btn-lg" t-on-click="this.props.skip">
+                Skip and start from scratch
+            </button>
+        </div>
+
+    </t>
+
+    <t t-name="yourent_configurator.yourent_configurator_welcome_screen">
+        <div class="o_configurator_screen h-100 d-flex flex-column o_welcome_screen">
+<div class="o_configurator_logo" style="position: absolute; top: 16px; right: 125px; height: 19px; width: 54px;">
+    <img src="/yourent_configurator/static/src/img/logo.png"
+         alt="YouRent"
+         style="height: 100%; width: auto;" />
+</div>
+            <div class="o_configurator_screen_content d-flex h-100">
+                <div class="container align-self-center o_configurator_show">
+                    <div class="display-2 mb-2">
+                        Ready to configure  <br class="d-none d-lg-inline"/>
+                        <b class="text-primary">Yourent</b>
+                    </div>
+                    <div class="h1 fw-light mb-4 text-600">
+                        We'll set you up and running in <b>3 easy steps</b>
+                    </div>
+                    <button class=" btn btn-primary btn-lg px-4 py-2"
+                            t-on-click="goToStep1">
+                        Let's configure it
+                    </button>
+                </div>
+            </div>
+
+            <SkipButton skip="this.props.skip"/>
+        </div>
+
+    </t>
+
+    <!-- Step 1: Company Information WITH LOGO UPLOAD AND COUNTRY -->
+    <t t-name="yourent_configurator.yourent_configurator_step1_screen">
+        <div class="o_configurator_screen h-100 d-flex flex-column o_step1_screen">
+
+            <div class="o_configurator_logo" style="position: absolute; top: 16px; right: 125px; height: 19px; width: 54px;">
+                <img src="/yourent_configurator/static/src/img/logo.png"
+                     alt="YouRent"
+                     style="height: 100%; width: auto;" />
+            </div>
+            <div class="o_configurator_screen_content d-flex h-100 flex-grow-1">
+                <div class="container align-self-center">
+                    <div class="mb-4">
+                        <span class="badge bg-secondary">Step 1 of 3</span>
+                    </div>
+                    <div class="o_configurator_typing_text mb-4 o_configurator_show">
+                        <h3 class="display-4 mb-3">
+                            Tell us about your <b class="text-primary">company</b>
+                        </h3>
+                        <p class="h5 text-muted">Let's start with your business details and logo</p>
+                    </div>
+
+                <!-- Company Information Form - Side by Side Layout -->
+                <div class="row justify-content-center align-items-start g-4">
+                    <!-- Left Column: Form Fields -->
+                    <div class="col-12 col-lg-6">
+                        <!-- Company Name -->
+                        <div class="mb-3">
+                            <label class="form-label h5">Company Name *</label>
+                            <input type="text" class="form-control form-control-lg"
+                                   t-model="state.companyName"
+                                   placeholder="Your rental company name"/>
+                        </div>
+
+                        <!-- Country Selection -->
+                        <div class="mb-3">
+                            <label class="form-label h5">Country *</label>
+                            <div class="position-relative" t-ref="countryDropdown">
+                                <!-- Custom dropdown menu - POSITIONED ABOVE -->
+                                <div t-if="state.showCountryDropdown"
+                                     class="position-absolute w-100 bg-white border rounded shadow-lg"
+                                     style="max-height: 200px; overflow-y: auto; z-index: 1050; bottom: 100%; margin-bottom: 4px;">
+
+                                    <!-- Clear selection option -->
+                                    <div t-if="state.selectedCountry"
+                                         class="px-3 py-2 border-bottom bg-light text-muted"
+                                         style="cursor: pointer;"
+                                         t-on-click="clearCountrySelection">
+                                        <i class="fa fa-times me-2"></i>Clear selection
+                                    </div>
+
+                                    <!-- Filtered countries -->
+                                    <div t-foreach="state.getFilteredCountries()" t-as="country" t-key="country.id"
+                                         class="px-3 py-2 country-option"
+                                         style="cursor: pointer;"
+                                         t-attf-class="{{state.countryId === country.id ? 'bg-primary text-white' : ''}}"
+                                         t-on-click="() => this.selectCountry(country)"
+                                         t-on-mousedown="(event) => event.preventDefault()">
+                                        <span t-esc="country.name"/>
+                                        <small t-if="country.code" class="ms-2 opacity-75">
+                                            (<t t-esc="country.code"/>)
+                                        </small>
+                                    </div>
+
+                                    <!-- No results message -->
+                                    <div t-if="!state.getFilteredCountries().length"
+                                         class="px-3 py-2 text-muted text-center">
+                                        <i class="fa fa-search me-2"></i>No countries found
+                                    </div>
+                                </div>
+
+                                <!-- Input field -->
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           t-model="state.countrySearchText"
+                                           t-on-input="onCountrySearch"
+                                           t-on-focus="showCountryDropdown"
+                                           t-on-blur="hideCountryDropdown"
+                                           t-att-placeholder="state.selectedCountry ? state.selectedCountry.name : 'Choose a country...'"
+                                           autocomplete="off"
+                                           style="color: #212529 !important;"/>
+
+                                    <button class="btn btn-outline-primary"
+                                            type="button"
+                                            t-on-click="showCountryDropdown">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- Language Selection with Checkboxes in Form Control -->
+                    <div class="mb-3">
+                        <label class="form-label h5">Languages</label>
+                        <div class="form-control form-control-lg d-flex align-items-center justify-content-between">
+                            <!-- Dynamic checkboxes in a single row -->
+                            <div t-foreach="state.languages" t-as="language" t-key="language.id">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           t-att-id="'lang_' + language.code"
+                                           t-att-checked="state.isLanguageSelected(language.id)"
+                                           t-on-change="(event) => this.toggleLanguageCheckbox(language, event)" />
+                                    <label class="form-check-label" t-att-for="'lang_' + language.code">
+                                        <span t-esc="language.name"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Right Column: Colors and Logo Centered -->
+                    <div class="col-12 col-lg-6 d-flex flex-column align-items-center" >
+
+
+                        <!-- Logo Upload Section - Centered -->
+                        <div class="d-flex justify-content-center">
+                            <div t-on-click="uploadLogo"
+                                 t-attf-class="position-relative btn-link bg-light border border-2 border-dashed overflow-hidden d-flex justify-content-center align-items-center text-decoration-none {{state.logo ? 'p-2' : ''}}"
+                                 style="margin-top: 22px;width: 236px; height: 173px; border-radius: 14%; cursor: pointer; max-width: 100%;">
+
+                                <!-- Hidden file input -->
+                                <input type="file"
+                                       class="logo_selection_input"
+                                       t-on-change="changeLogo"
+                                       style="display:none"
+                                       name="logo_selection"
+                                       t-ref="logoSelectionInput"
+                                       accept="image/*"/>
+
+                                <!-- Upload button when no logo -->
+                                <div t-if="!state.logo" class="text-center p-3">
+                                    <i class="fa fa-cloud-upload fa-3x text-primary mb-2 d-block"></i>
+                                    <div class="text-muted">Upload Logo</div>
+                                    <small class="text-muted d-block">Click to browse</small>
+                                </div>
+
+                             <!-- Logo preview when uploaded -->
+                                <div t-if="state.logo" class="position-relative w-100 text-center">
+                                    <img style="max-height: 120px; max-width: 100%;"
+                                         t-attf-src="{{state.logo}}"
+                                         alt="Company Logo"
+                                         class="rounded"/>
+                                    <div class="mt-2">
+                                        <small class="text-muted">Click to change</small>
+                                    </div>
+                                </div>
+
+                                <!-- Remove logo button -->
+                                <i t-if="state.logo"
+                                   class="fa fa-times-circle text-danger position-absolute top-0 end-0 m-2"
+                                   t-on-click="removeLogo"
+                                   style="cursor: pointer; font-size: 1.2em;"
+                                   title="Remove logo"/>
+                            </div>
+                        </div>
+                        <div class="mb-4 w-100">
+                            <div class="row g-3 justify-content-center">
+                                <!-- Primary Color -->
+                                <div class="col-auto " style="margin-top: 30px;margin-left: 18px;">
+                                    <div class="text-center">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <input type="color"
+                                                   class="form-control form-control-color form-control-lg"
+                                                   t-model="state.brandColor"
+                                                   t-on-change="onBrandColorChange"
+                                                   style="width: 60px; height: 48px; "
+                                                   title="Choose your primary brand color"
+                                                   t-att-value="state.brandColor"/>
+                                        </div>
+                                        <label class="form-label ">Primary </label>
+
+                                    </div>
+                                </div>
+
+                                <!-- Secondary Color -->
+                                <div class="col-auto " style="margin-top: 30px; margin-left: 18px;">
+                                    <div class="text-center">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <input type="color"
+                                                   class="form-control form-control-color form-control-lg"
+                                                   t-model="state.secondaryColor"
+                                                   t-on-change="onSecondaryColorChange"
+                                                   style="width: 60px; height: 48px;"
+                                                   title="Choose your secondary brand color"
+                                                   t-att-value="state.secondaryColor "/>
+                                        </div>
+                                        <label class="form-label ">Secondary </label>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-5">
+                    <button class="btn btn-outline-secondary order-2 order-sm-1" t-on-click="goToWelcome">
+                        <i class="fa fa-arrow-left me-2"></i>Back
+                    </button>
+                    <button class="btn btn-primary order-1 order-sm-2"
+                            t-att-disabled="!state.companyName or !state.countryId "
+                            t-on-click="goToStep2">
+                        Continue <i class="fa fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <SkipButton skip="this.props.skip"/>
+    </div>
+</t>
+
+    <!-- Step 2: Property Types  -->
+<t t-name="yourent_configurator.yourent_configurator_step2_screen">
+    <div class="o_configurator_screen h-100 d-flex flex-column o_step2_screen">
+        <style>
+            /* Card flip animation styles */
+
+            .flip-card {
+                background-color: transparent;
+                perspective: 1000px;
+                height: 250px; /* Restored to original card height */
+            }
+
+            .flip-card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                transition: transform 0.6s;
+                transform-style: preserve-3d;
+            }
+
+            .flip-card:hover .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+
+            .flip-card-front, .flip-card-back {
+                position: absolute;
+                width: 100%;
+                height: 80%;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                border-radius: 0.375rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .flip-card-front {
+                background-color: white;
+                border: 2px solid #e9ecef;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .flip-card-back {
+                background: linear-gradient(135deg, var(--primary, #0d6efd) 0%, #145593 100%);
+                color: white;
+                transform: rotateY(180deg);
+                box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            }
+
+            .flip-card.selected .flip-card-front {
+                border-color: var(--primary, #0d6efd);
+                background-color: rgba(var(--primary-rgb, 13, 110, 253), 0.1);
+                box-shadow: 0 4px 8px rgba(var(--primary-rgb, 13, 110, 253), 0.3);
+            }
+
+            .flip-card-back h5 {
+                color: white;
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                font-weight: 600;
+            }
+
+            .flip-card-back p{
+                font-size: 0.9rem;
+                line-height: 1.5;
+                opacity: 0.9;
+            }
+
+            .flip-card-back .features-list {
+                list-style: none;
+                padding: 0;
+                margin: 1rem 0 0 0;
+            }
+
+            .flip-card-back .features-list li {
+                font-size: 0.85rem;
+                margin: 0.3rem 0;
+                padding-left: 1rem;
+                position: relative;
+            }
+
+            .flip-card-back .features-list li:before {
+                position: absolute;
+                left: 0;
+                font-weight: bold;
+                color: #4ade80;
+            }
+
+            /* Hover hint */
+            .hover-hint {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                font-size: 0.7rem;
+                color: #6c757d;
+                opacity: 0.7;
+                transition: opacity 0.3s;
+            }
+
+            .flip-card:hover .hover-hint {
+                opacity: 0;
+            }
+        </style>
+
+        <div class="o_configurator_logo" style="position: absolute; top: 16px; right: 125px; height: 19px; width: 54px;">
+            <img src="/yourent_configurator/static/src/img/logo.png"
+                 alt="YouRent"
+                 style="height: 100%; width: auto;" />
+        </div>
+
+        <div class="o_configurator_screen_content d-flex h-100 flex-grow-1">
+            <div class="container align-self-center">
+                <div class="mb-4">
+                    <span class="badge bg-secondary">Step 2 of 3</span>
+                </div>
+                <div class="o_configurator_typing_text mb-4 o_configurator_show">
+                    <h2 class="display-4 mb-3">
+                        What type of <b class="text-primary">business</b> do you manage?
+                    </h2>
+                    <p class="h5 text-muted">Choose the option that best describes your business. Hover over cards for more details.</p>
+                </div>
+
+                <div class="row g-4 mb-4 justify-content-center">
+                    <t t-foreach="state.getPropertyTypes()" t-as="propertyType" t-key="propertyType.id">
+                        <div class="col-md-6 col-lg-4">
+                            <div t-attf-class="flip-card  {{state.isPropertyTypeSelected(propertyType.id) ? 'selected' : ''}}"
+                                 t-on-click="() => state.selectPropertyType(propertyType.id)"
+                                 style="cursor: pointer; transition: all 0.3s ease;">
+
+
+                                <div class="flip-card-inner">
+                                    <!-- Front of card -->
+                                    <div class="flip-card-front">
+                                        <div class="text-center">
+                                            <i t-attf-class="fa {{propertyType.icon}} fa-3x text-primary mb-3"></i>
+                                            <h5 class="card-title fw-bold mb-3" t-esc="propertyType.name"/>
+
+                                            <!-- Radio button indicator -->
+                                            <div class="mt-3">
+                                                <i t-if="state.isPropertyTypeSelected(propertyType.id)"
+                                                   class="fa fa-dot-circle-o fa-lg text-primary"></i>
+                                                <i t-else=""
+                                                   class="fa fa-circle-o fa-lg text-muted"></i>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <!-- Back of card -->
+                                    <div class="flip-card-back">
+                                        <h5 t-esc="propertyType.name"/>
+<!--                                        <p t-esc="propertyType.description"/>-->
+
+                                        <t t-if="propertyType.id == 1">
+                                            <p>
+                                                As an independent owner, you have full control over your property.
+                                                You directly handle tenants, collect rent for yourself, and manage
+                                                the overall maintenance of your space.
+                                            </p>
+                                        </t>
+                                        <t t-if="propertyType.id == 2">
+                                            <p>
+                                                As an agency or manager, you operate on behalf of multiple property
+                                                owners. Your income is commission-based, with responsibilities
+                                                including professional management and providing landlords with
+                                                regular reports.
+                                            </p>
+                                        </t>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-outline-secondary" t-on-click="goToStep1">
+                            <i class="fa fa-arrow-left me-2"></i>Back
+                        </button>
+                        <button class="btn btn-primary btn-lg"
+                                t-att-disabled="!state.hasSelectedPropertyType()"
+                                t-on-click="goToStep3">
+                             Continue <i class="fa fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <SkipButton skip="this.props.skip"/>
+        </div>
+    </t>
+<t t-name="yourent_configurator.yourent_configurator_step3_screen">
+    <div class="o_configurator_screen h-100 d-flex flex-column o_step3_screen">
+        <div class="o_configurator_logo" style="position: absolute; top: 16px; right: 125px; height: 19px; width: 54px;">
+                <img src="/yourent_configurator/static/src/img/logo.png"
+                     alt="YouRent"
+                     style="height: 100%; width: auto;" />
+        </div>
+
+        <div class="o_configurator_screen_content d-flex h-100 flex-grow-1">
+            <div class="container align-self-center">
+
+                <!-- Header Section - Moved up and made bigger -->
+                <div class="mb-5 mt-n4">
+                    <span class="badge bg-secondary fs-5 px-4 py-2">Step 3 of 3</span>
+                </div>
+
+                <!-- Improved Tab Navigation - Nicer styling -->
+                <div class="mb-4">
+                    <ul class="nav nav-pills nav-fill rounded-pill p-2" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 1px solid #dee2e6;">
+                        <t t-foreach="state.getStep3Categories()" t-as="category" t-key="category.id">
+                            <li class="nav-item mx-1">
+                                <button class="nav-link py-3 px-4 position-relative rounded-pill fw-bold"
+                                        t-attf-class="{{state.activeCategory === category.id || (state.activeCategory === null and category_index == 0) ? 'active' : ''}}"
+                                        t-attf-data-category="{{category.id}}"
+                                        t-on-click="() => state.setActiveCategory(category.id)"
+                                        style=" border: none; background: transparent; transition: all 0.3s ease; font-size: 0.95rem; min-height: 50px;">
+                                    <i t-attf-class="fa {{category.icon}} me-2" style="font-size: 1.1em;"></i>
+                                    <span t-esc="category.name"/>
+                                </button>
+                            </li>
+                        </t>
+                    </ul>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="mb-4">
+                    <t t-foreach="state.getStep3Categories()" t-as="category" t-key="category.id">
+                        <div t-attf-class="tab-content {{state.activeCategory === category.id || (state.activeCategory === null &amp;&amp; category_index == 0) ? 'd-block' : 'd-none'}}">
+
+                            <!-- Compact Select All - Top Right Corner -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <div class="d-flex align-items-center">
+                                    <label class="form-check-label me-2 small text-muted" style="cursor: pointer; font-size: 0.85rem;"
+                                           t-attf-for="selectAll{{category.id}}">
+                                        Select All
+                                    </label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               t-attf-id="selectAll{{category.id}}"
+                                               t-att-checked="state.isCategoryFullySelected(category.id)"
+                                               t-on-change="(event) => state.toggleCategorySelectAll(category.id, event.target.checked)"
+                                               style="cursor: pointer; transform: scale(0.9);"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Options Grid - Better spacing and layout -->
+                            <div class="row g-4 justify-content-center">
+                                <t t-foreach="category.options" t-as="option" t-key="option.id">
+                                    <div class="col-xl-3 col-lg-4 col-md-6 col-12">
+                                        <div class="card border option-card position-relative h-100"
+                                             t-attf-class="{{state.isStep3OptionSelected(option.id) ? 'border-primary bg-primary bg-opacity-10' : 'border-light hover-border-primary'}}"
+                                             t-on-click="() => state.toggleStep3Option(option.id)"
+                                             t-attf-style="cursor: {{state.isStep3OptionRequired(option.id) ? 'not-allowed' : 'pointer'}}; transition: all 0.3s ease; min-height: 140px;">
+
+                                            <!-- Required Badge -->
+                                            <span t-if="state.isStep3OptionRequired(option.id)"
+                                                  class="position-absolute badge bg-warning text-dark"
+                                                  style="top: 8px; right: 8px; z-index: 10; font-size: 0.7em; padding: 4px 8px;">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+
+                                            <div class="card-body p-4 d-flex flex-column h-100">
+                                                <!-- Header with checkbox and title -->
+                                                <div class="d-flex align-items-start mb-3">
+                                                    <!-- Checkbox -->
+                                                    <div class="me-3 flex-shrink-0">
+                                                        <i t-if="state.isStep3OptionSelected(option.id)"
+                                                           t-attf-class="fa fa-check-square fa-xl {{state.isStep3OptionRequired(option.id) ? 'text-warning' : 'text-primary'}}"></i>
+                                                        <i t-else=""
+                                                           class="fa fa-square-o fa-xl text-muted"></i>
+                                                    </div>
+
+                                                    <!-- Title -->
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="card-title mb-0 fw-bold" style="font-size: 1.1rem; line-height: 1.3;" t-esc="option.name"/>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Description -->
+                                                <div class="flex-grow-1 d-flex align-items-center">
+                                                    <p class="card-text text-muted mb-0" style="font-size: 0.9rem; line-height: 1.5;" t-esc="option.description || 'Feature description'"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Navigation Buttons - Moved down and slightly bigger -->
+                <div class="d-flex justify-content-between mt-5 pt-4">
+                    <button class="btn btn-outline-secondary px-3 py-2" style="font-size: 1.05rem;" t-on-click="goToStep2">
+                        <i class="fa fa-arrow-left me-2"></i>Back
+                    </button>
+                    <button class="btn btn-primary px-3 py-2" style="font-size: 1.05rem;" t-on-click="completeConfiguration">
+                        Complete Setup <i class="fa fa-check ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div t-if="state.isLoading" class="yourent_loader_overlay">
+                <div class="yourent_loader_container">
+                    <div class="yourent_loader_card">
+                        <h3 class="mb-3">Setting up your rental system...</h3>
+                        <p class="mb-4">Installing modules and configuring your workspace</p>
+
+                        <div class="yourent_loader_icon mb-4">
+                            <div class="yourent_loader_spinner">
+                                <div class="yourent_loader_bounce1"></div>
+                                <div class="yourent_loader_bounce2"></div>
+                                <div class="yourent_loader_bounce3"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress mb-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar"
+                                 t-att-style="'width: ' + state.loadingProgress + '%; background: white; color:#714b67;'"
+                                 t-att-aria-valuenow="state.loadingProgress"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                <t t-esc="state.loadingProgress"/>%
+                            </div>
+                        </div>
+
+                        <div t-if="state.loadingMessage" class="mt-2">
+                            <small class="fw-bold" style="color: #000;" t-esc="state.loadingMessage"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <SkipButton skip="this.props.skip"/>
+    </div>
+
+    <!-- IMPROVED CSS for better styling -->
+    <style>
+        .o_step3_screen {
+            background: #ffffff;
+        }
+
+        /* Improved Tab Styling - More elegant */
+        .o_step3_screen .nav-pills .nav-link.active {
+            background: var(--primary) !important;
+            color: white !important;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            border: 2px solid transparent;
+        }
+
+        .o_step3_screen .nav-pills .nav-link {
+            color: #495057;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .o_step3_screen .nav-pills .nav-link:hover:not(.active) {
+            background: color-mix(in srgb, var(--primary) 10%, transparent) !important;
+            color: var(--primary) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 20%, transparent);
+            border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+
+        /* Option Cards */
+        .o_step3_screen .option-card {
+            transition: all 0.3s ease;
+            border-radius: 8px !important;
+        }
+
+        .o_step3_screen .card {
+            border-radius: 8px !important;
+        }
+
+        .o_step3_screen .card-body {
+            border-radius: 8px !important;
+        }
+
+        .o_step3_screen .option-card:hover:not([style*="not-allowed"]) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .o_step3_screen .option-card.border-primary {
+            box-shadow: 0 4px 20px color-mix(in srgb, var(--primary) 25%, transparent);
+            border-color: var(--primary) !important;
+        }
+
+        .o_step3_screen .hover-border-primary:hover {
+            border-color: var(--primary) !important;
+        }
+
+        /* Card content styling */
+        .o_step3_screen .card-title {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .o_step3_screen .card-text {
+            color: #718096 !important;
+        }
+
+        /* Checkbox styling with primary color */
+        .o_step3_screen .form-check-input {
+            background-color: transparent;
+            border-color: #dee2e6;
+            cursor: pointer;
+        }
+
+        .o_step3_screen .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .o_step3_screen .form-check-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--primary) 25%, transparent);
+        }
+
+        .o_step3_screen .form-check-input:checked:focus {
+            box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--primary) 25%, transparent);
+        }
+
+        /* Tab Content Animation */
+        .o_step3_screen .tab-content {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 1200px) {
+            .o_step3_screen .option-card {
+                min-height: 130px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .o_step3_screen .nav-pills .nav-link {
+                font-size: 0.8rem !important;
+                padding: 0.75rem 1rem !important;
+                min-height: 45px;
+            }
+
+            .o_step3_screen .nav-pills .nav-link i {
+                font-size: 1em !important;
+            }
+
+            .o_step3_screen .option-card {
+                min-height: 120px !important;
+            }
+
+            .o_step3_screen .card-body {
+                padding: 1rem !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .o_step3_screen .nav-pills {
+                flex-direction: column !important;
+                gap: 0.5rem;
+            }
+
+            .o_step3_screen .nav-pills .nav-item {
+                margin: 0 !important;
+            }
+
+            .o_step3_screen .nav-pills .nav-link {
+                text-align: center;
+                min-height: 40px;
+            }
+        }
+
+        /* Container centering to match Step 2 */
+        .o_step3_screen .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Ensure consistent spacing */
+        .o_step3_screen .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+        .o_step3_screen .option-card.conditionally-required {
+    border-color: #ffc107 !important; /* Warning color for conditionally required */
+}
+
+.o_step3_screen .option-card.conditionally-required .badge {
+    background-color: #ffc107 !important;
+}
+
+        .o_step3_screen .tab-content[data-category="financial_features"] .option-card,
+        .o_step3_screen .tab-content:has(.col-xl-3:nth-child(5)) .option-card {
+            min-height: 120px !important;
+        }
+
+        .o_step3_screen .tab-content[data-category="financial_features"] .card-body,
+        .o_step3_screen .tab-content:has(.col-xl-3:nth-child(5)) .card-body {
+            padding: 1rem !important;
+        }
+
+        .o_step3_screen .tab-content[data-category="financial_features"] .card-title,
+        .o_step3_screen .tab-content:has(.col-xl-3:nth-child(5)) .card-title {
+            font-size: 1rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .o_step3_screen .tab-content[data-category="financial_features"] .card-text,
+        .o_step3_screen .tab-content:has(.col-xl-3:nth-child(5)) .card-text {
+            font-size: 0.85rem !important;
+        }
+
+
+        @media (max-width: 1200px) {
+            .o_step3_screen .option-card {
+                min-height: 130px !important;
+            }
+
+
+            .o_step3_screen .tab-content[data-category="financial_features"] .option-card,
+            .o_step3_screen .tab-content:has(.col-xl-3:nth-child(5)) .option-card {
+                min-height: 110px !important;
+            }
+        }
+    </style>
+</t>
+    <t t-name="yourent_configurator.yourent_configurator_main">
+        <div class="o_configurator_container">
+            <Step1Screen t-if="state.currentStep === 1" navigate="(screen) => this.navigate(screen)" skip.bind="skipConfigurator"/>
+            <Step2Screen t-elif="state.currentStep === 2" navigate="(screen) => this.navigate(screen)" skip.bind="skipConfigurator"/>
+            <Step3Screen t-elif="state.currentStep === 3"
+                         navigate="(screen) => this.navigate(screen)"
+                         skip.bind="skipConfigurator"
+                         />
+            <WelcomeScreen t-else="" navigate="(screen) => this.navigate(screen)" skip.bind="skipConfigurator"/>
+
+        </div>
+
+    </t>
+
+</templates>

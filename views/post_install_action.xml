@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data noupdate="1">
+            <record id="yourent_configurator_redirect" model="ir.actions.client">
+                    <field name="name">YourRentConfigurator</field>
+                    <field name="tag">yourent_configurator</field>
+<!--                <field name="target">fullscreen</field>-->
+
+
+             </record>
+            <record id="yourent_configurator_url" model="ir.actions.act_url">
+                    <field name="name">YourRentConfiguratorUrl</field>
+                    <field name="url">/yourent/configurator</field>
+                    <field name="target">self</field>
+            </record>
+            <record id="base.user_admin" model="res.users">
+                <field name="action_id" ref="yourent_configurator_url"/>
+            </record>
+
+             <record model="ir.config_parameter" id="yourent_configurator_done">
+                <field name="key">yourent_configurator.yourent_configurator_done</field>
+                <field name="value">False</field>
+            </record>
+     </data>
+
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--      <data noupdate="1">-->
+<!--        &lt;!&ndash; Client action for the configurator &ndash;&gt;-->
+<!--            <record id="yourent_configurator" model="ir.actions.client">-->
+<!--                <field name="name">Your Rent Configurator</field>-->
+<!--                <field name="tag">yourent_configurator</field>-->
+<!--                <field name="target">fullscreen</field>-->
+<!--            </record>-->
+<!--       </data>-->
+<!--        <record id="action_yourent_post_install_url" model="ir.actions.act_url">-->
+<!--            <field name="name">Your Rent Configuration</field>-->
+<!--            <field name="url">/yourent/configurator</field>-->
+<!--            <field name="target">self</field>-->
+<!--        </record>-->
+<!--        <record id="yourent_configurator_todo" model="ir.actions.todo">-->
+<!--            <field name="name">Start Your Rent Configurator</field>-->
+<!--            <field name="action_id" ref="action_yourent_post_install_url"/>-->
+<!--            <field name="sequence">1</field>-->
+<!--        </record>-->
+
+

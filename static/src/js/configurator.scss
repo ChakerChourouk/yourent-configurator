@@ -1,0 +1,532 @@
+// YourRent Configurator Styles
+// ============================================================================
+// Based on Odoo Website Configurator with customizations
+
+:root {
+    --configurator-bg-primary: #ffffff;
+    --configurator-bg-secondary: #f8f9fa;
+    --configurator-text-primary: #212529;
+    --configurator-text-secondary: #6c757d;
+    --configurator-border-color: #dee2e6;
+    --configurator-card-bg: #ffffff;
+    --configurator-shadow: var(--primary);
+     --primary-rgb: var(--primary);
+}
+
+[data-theme="dark"] {
+    --configurator-bg-primary: #1a1a1a;
+    --configurator-bg-secondary: #2d2d2d;
+    --configurator-text-primary: #ffffff;
+    --configurator-text-secondary: #b0b0b0;
+    --configurator-border-color: #404040;
+    --configurator-card-bg: #2d2d2d;
+    --configurator-shadow: rgba(0, 0, 0, 0.3);
+}
+
+.o_configurator_container {
+
+    background-color: var(--configurator-bg-primary);
+    color: var(--configurator-text-primary);
+    $input-font-size: 40%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    .o_configurator_screen {
+
+        // ==== Animations
+        @keyframes configuratorFadeIn{
+            from {opacity: 0}
+            to {opacity: 1}
+        }
+
+        @keyframes theme_screenshot_scroll {
+            to { transform: translate3d(0, -24%, 0)}
+        }
+
+        @keyframes theme_screenshot_scroll_small {
+            to { transform: translate3d(0, -31.5%, 0)}
+        }
+
+        // ==== General Components
+        %o_configurator_titles_weight {
+            font-weight: 300;
+
+            b {
+                font-weight: 500;
+            }
+        }
+
+        .o_configurator_typing_text {
+            font-size: 28px;
+            @extend %o_configurator_titles_weight;
+
+            @include media-breakpoint-up(md) {
+                font-size: 32px;
+            }
+
+            @include media-breakpoint-up(lg) {
+                font-size: 36px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                font-size: 40px;
+            }
+        }
+
+        @for $i from 1 through 6 {
+            .h#{$i} {
+                @extend %o_configurator_titles_weight;
+            }
+        }
+
+        .o_configurator_hide {
+            opacity: 0;
+        }
+
+        .o_configurator_show {
+            animation: configuratorFadeIn 1s;
+        }
+
+        .o_configurator_show_fast {
+            animation: configuratorFadeIn .35s;
+        }
+
+        .o_configurator_screen_content {
+            overflow-y: auto;
+        }
+
+        .o_configurator_logo_wrapper {
+            img {
+                object-fit: contain;
+            }
+        }
+
+        // Custom YourRent logo styling
+        .o_configurator_logo {
+            color: var(--bs-primary, #0d6efd);
+            font-weight: 600;
+        }
+
+        // ==== Theme Toggle Button
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: var(--configurator-card-bg);
+            border: 2px solid var(--configurator-border-color);
+            color: var(--configurator-text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px var(--configurator-shadow);
+
+            &:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 15px var(--configurator-shadow);
+            }
+
+            .fa {
+                font-size: 20px;
+                transition: all 0.3s ease;
+            }
+        }
+
+        // ==== Welcome Screen Specific Styles
+        &.o_welcome_screen {
+            background: linear-gradient(135deg, var(--configurator-bg-secondary) 0%, var(--configurator-bg-primary) 100%);
+
+            .display-2 {
+                font-weight: 300;
+                line-height: 1.2;
+                color: var(--configurator-text-primary);
+
+                b {
+                    font-weight: 600;
+                }
+            }
+
+            .text-600 {
+                color: var(--configurator-text-secondary) !important;
+            }
+        }
+
+        // ==== Step Screens
+        &.o_step1_screen, &.o_step2_screen {
+            .badge {
+                font-size: 0.875rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        // ==== Step 1: Company Information Screen
+        &.o_step1_screen {
+
+
+
+            .country-option {
+                transition: background-color 0.2s ease;
+                color: var(--configurator-text-primary) !important;
+
+                &:hover {
+                    background-color: rgba(108, 117, 125, 0.1) !important;
+                }
+            }
+
+
+
+
+        }
+
+        // ==== Step 2: Property Types Screen
+        &.o_step2_screen {
+            .card {
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border-radius: 0.75rem;
+                background-color: var(--configurator-card-bg);
+                border-color: var(--configurator-border-color);
+                color: var(--configurator-text-primary);
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 15px var(--configurator-shadow) !important;
+                }
+
+                &.border-info {
+                    box-shadow: 0 4px 20px rgba(13, 202, 240, 0.2);
+                    background-color: rgba(13, 202, 240, 0.1);
+                }
+
+                .card-body {
+                    padding: 2rem;
+                }
+
+                .card-title {
+                    color: var(--configurator-text-primary);
+                }
+
+                .card-text {
+                    color: var(--configurator-text-secondary) !important;
+                }
+
+                .fa {
+                    transition: transform 0.3s ease;
+                }
+
+                &:hover .fa {
+                    transform: scale(1.1);
+                }
+            }
+
+            .hover-shadow:hover {
+                box-shadow: 0 2px 10px var(--configurator-shadow);
+            }
+        }
+
+        // ==== Button Styles
+        .btn {
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+
+
+        .btn-link {
+            color: #6c757d;
+
+            &:hover {
+                color: #495057;
+                text-decoration: underline;
+            }
+        }
+
+        // ==== Skip Button
+        .container-fluid .btn-link {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: rgba(108, 117, 125, 0.1);
+            }
+        }
+
+        // ==== Responsive Design Improvements
+        @include media-breakpoint-down(md) {
+            .display-2 {
+                font-size: 2.5rem;
+            }
+
+            .display-4 {
+                font-size: 1.8rem;
+            }
+
+            .o_configurator_typing_text {
+                font-size: 24px;
+            }
+
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .card-body {
+                padding: 1.5rem !important;
+            }
+        }
+
+        // ==== Form Enhancements
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-control-lg {
+            font-size: 1.1rem;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e9ecef;
+
+            &:focus {
+                border-width: 2px;
+                box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--primary) 25%, transparent);
+            }
+        }
+
+
+
+
+
+        // ==== Animation Classes
+        .o_configurator_show {
+            animation: configuratorFadeIn 1s ease-out;
+        }
+
+        .o_configurator_show_fast {
+            animation: configuratorFadeIn 0.35s ease-out;
+        }
+
+        // ==== Logo Upload Specific Styles
+        .logo_selection_input {
+            display: none !important;
+        }
+
+        .fa-times-circle {
+            cursor: pointer;
+            background-color: white;
+            border-radius: 50%;
+
+            &:hover {
+                color: #dc3545 !important;
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+// ==== Global YourRent Configurator Overrides
+.o_configurator_container {
+    // Ensure full height and proper positioning
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.yourent_loader_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); // dark transparent backdrop
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998; // sits above page but under loader
+
+  .yourent_loader_container {
+    background: linear-gradient(135deg, #63a3ce 0%, #145593 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .yourent_loader_card {
+    //background: rgba(255, 255, 255, 0.1);
+    //backdrop-filter: blur(10px);
+    //border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+    color: white;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+
+.yourent_loader_container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 60%;
+  height: 80%;
+  border-radius: 20px;
+  padding: 2rem;
+  background: linear-gradient(135deg, #63a3ce 0%, #145593 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .yourent_loader_card {
+    //background: rgba(255, 255, 255, 0.1);
+    //backdrop-filter: blur(10px);
+    //border-radius: 16px;
+    padding: 3rem;
+    text-align: center;
+    color: white;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h3 {
+      font-size: 2rem; // bigger title
+      font-weight: bold;
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .progress {
+      height: 35px; // bigger progress bar
+      font-size: 1.2rem;
+    }
+
+    small {
+      font-size: 1rem;
+    }
+  }
+
+  // 🔹 Responsive tweaks
+  @media (max-width: 992px) {
+    width: 90%;
+    height: 75%;
+    .yourent_loader_card {
+      padding: 2rem;
+      h3 { font-size: 1.5rem; }
+      p { font-size: 1rem; }
+      .progress { height: 28px; font-size: 1rem; }
+    }
+  }
+
+  @media (max-width: 576px) {
+    width: 95%;
+    height: 70%;
+    .yourent_loader_card {
+      padding: 1.5rem;
+      h3 { font-size: 1.2rem; }
+      p { font-size: 0.9rem; }
+      .progress { height: 24px; font-size: 0.9rem; }
+    }
+  }
+
+
+    .yourent_loader_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .yourent_loader_spinner {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem; // spacing between dots
+  }
+
+  .yourent_loader_bounce1,
+  .yourent_loader_bounce2,
+  .yourent_loader_bounce3 {
+    width: 18px;
+    height: 18px;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: yourent-bounce 1.4s infinite ease-in-out both;
+  }
+
+  // delay each dot
+  .yourent_loader_bounce1 {
+    animation-delay: -0.32s;
+  }
+  .yourent_loader_bounce2 {
+    animation-delay: -0.16s;
+  }
+}
+
+// keyframes for bouncing animation
+@keyframes yourent-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+
+}
+
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+    opacity: 0.8;
+}
+

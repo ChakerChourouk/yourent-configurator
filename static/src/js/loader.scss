@@ -1,0 +1,94 @@
+///* YourRent Loader Styles */
+//.yourent_loader_container {
+//    background: rgba(var(--primary-rgb, 113, 75, 103), 0.04);
+//    animation: gradientShift 8s ease-in-out infinite;
+//}
+//
+//@keyframes gradientShift {
+//    0%, 100% { background:rgba(var(--primary-rgb, 113, 75, 103), 0.04); }
+//    50% { background: rgba(var(--primary-rgb, 113, 75, 103), 0.04); }
+//}
+//
+//.yourent_loader_icon {
+//    position: relative;
+//    display: inline-block;
+//}
+//
+//.yourent_loader_spinner {
+//    width: 70px;
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//}
+//
+//.yourent_loader_bounce1,
+//.yourent_loader_bounce2,
+//.yourent_loader_bounce3 {
+//    width: 18px;
+//    height: 18px;
+//    background-color: #000;
+//    border-radius: 100%;
+//    display: inline-block;
+//    animation: yourent-bounce 1.4s ease-in-out infinite both;
+//}
+//
+//.yourent_loader_bounce1 {
+//    animation-delay: -0.32s;
+//}
+//
+//.yourent_loader_bounce2 {
+//    animation-delay: -0.16s;
+//}
+//
+//@keyframes yourent-bounce {
+//    0%, 80%, 100% {
+//        transform: scale(0);
+//        opacity: 0.5;
+//    }
+//    40% {
+//        transform: scale(1.0);
+//        opacity: 1;
+//    }
+//}
+//
+//.yourent_loader_progress {
+//    border: 2px solid rgba(255, 255, 255, 0.2);
+//    background-color: rgba(255, 255, 255, 0.1);
+//}
+//
+//.yourent_loader_progress .progress-bar {
+//    background: linear-gradient(90deg, #28a745, #20c997, #17a2b8);
+//    background-size: 200% 100%;
+//    animation: progressGradient 2s linear infinite;
+//}
+//
+//@keyframes progressGradient {
+//    0% { background-position: 200% 0; }
+//    100% { background-position: -200% 0; }
+//}
+//
+///* Fade in animation for the container */
+//.yourent_loader_container {
+//    animation: fadeInLoader 0.5s ease-in-out;
+//}
+//
+//@keyframes fadeInLoader {
+//    from {
+//        opacity: 0;
+//        transform: scale(0.9);
+//    }
+//    to {
+//        opacity: 1;
+//        transform: scale(1);
+//    }
+//}
+//
+///* Pulse animation for important text */
+//.yourent_loader_container h3 {
+//    animation: textPulse 2s ease-in-out infinite;
+//}
+//
+//@keyframes textPulse {
+//    0%, 100% { opacity: 1; }
+//    50% { opacity: 0.8; }
+//}

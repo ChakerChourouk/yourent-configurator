@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- YourRent Loader Template -->
+    <t t-name="yourent_configurator.yourent_loader">
+        <div t-if="state.isVisible"
+             class="yourent_loader_container position-fixed fixed-top fixed-left h-100 w-100 d-flex flex-column align-items-center justify-content-center fw-bold text-center"
+             style="background: linear-gradient(135deg, #63a3ce 0%, #714b67 100%); z-index: 9999;">
+
+            <!-- Logo/Brand -->
+            <div class="mb-4">
+                <h2 class="text-white mb-3">
+                    <i class="fa fa-home text-white me-2"></i>
+                    Your Rent
+                </h2>
+            </div>
+
+            <!-- Current Message -->
+            <div class="text-white mb-4 text-center" style="max-width: 600px;">
+                <h3 class="mb-3" t-out="state.currentMessage.title"/>
+                <p class="h5 opacity-75" t-out="state.currentMessage.description"/>
+            </div>
+
+            <!-- Animated Loader Icon -->
+            <div class="yourent_loader_icon mb-4">
+                <div class="yourent_loader_spinner">
+                    <div class="yourent_loader_bounce1"></div>
+                    <div class="yourent_loader_bounce2"></div>
+                    <div class="yourent_loader_bounce3"></div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="yourent_loader_progress progress rounded-pill mb-4" style="width: 400px; height: 8px;">
+                <div role="progressbar"
+                     aria-label="Setting up your rental system"
+                     class="progress-bar bg-success progress-bar-striped progress-bar-animated rounded-pill"
+                     t-att-aria-valuemax="100"
+                     t-att-aria-valuenow="state.progress"
+                     t-attf-style="width: #{state.progress}%"/>
+            </div>
+
+            <!-- Progress Percentage -->
+            <div class="text-white opacity-75">
+                <span t-esc="Math.round(state.progress)"/>% Complete
+            </div>
+
+            <!-- Warning Message -->
+            <div class="text-white-50 mt-4 text-center" style="max-width: 500px;">
+                <small>
+                    <i class="fa fa-exclamation-triangle me-2"></i>
+                    Please don't close this window. Your rental system is being configured...
+                </small>
+            </div>
+        </div>
+    </t>
+
+</templates>
